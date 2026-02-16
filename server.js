@@ -45,7 +45,7 @@ app.post("/send-notification", async (req, res) => {
 
     res.json({
       success: true,
-      message: "Notification sent",
+      message: "Notification with action payload sent",
       firebaseResponse: response,
       receivedPayload: payloadFromFrontend,
     });
