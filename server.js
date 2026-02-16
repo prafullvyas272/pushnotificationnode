@@ -12,23 +12,22 @@ app.use(express.json());
  */
 app.post("/send-notification", async (req, res) => {
   try {
-    const payloadFromFrontend = req.body;
-    const { fcmToken, title, body } = payloadFromFrontend;
-
-    if (!fcmToken) {
-      return res.status(400).json({
-        success: false,
-        message: "fcmToken is required",
-        receivedPayload: payloadFromFrontend,
-      });
-    }
-
     const {
+      fcmToken,
+      title,
+      body,
       android,
       ios,
       apns,
       ...restData
     } = payloadFromFrontend;
+    
+    const androidConfig = {
+      priority: "high",
+      notification: {
+        channelId: android?.channelId || "default",
+      },
+    };
     
     const message = {
       token: fcmToken,
@@ -38,15 +37,23 @@ app.post("/send-notification", async (req, res) => {
         body: body || "Hello from Node.js",
       },
     
-      data: Object.fromEntries(
-        Object.entries(restData).map(([k, v]) => [k, String(v)])
-      ),
+      data: {
+        ...Object.fromEntries(
+          Object.entries(restData).map(([k, v]) => [k, String(v)])
+        ),
+        notifee: JSON.stringify({
+          android,
+          ios,
+        }),
+      },
     
-      android: android || { priority: "high" },
+      android: androidConfig,
+    
       apns: apns || {
         payload: { aps: { sound: "default" } },
       },
     };
+    
 
     const response = await admin.messaging().send(message);
 
