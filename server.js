@@ -23,21 +23,31 @@ app.post("/send-notification", async (req, res) => {
       });
     }
 
+    const {
+      fcmToken,
+      title,
+      body,
+      android,
+      ios,
+      apns,
+      ...restData
+    } = payloadFromFrontend;
+    
     const message = {
       token: fcmToken,
+    
       notification: {
         title: title || "Test Notification",
-        body: body || "Hello from Node.js ",
+        body: body || "Hello from Node.js",
       },
-      android: {
-        priority: "high",
-      },
-      apns: {
-        payload: {
-          aps: {
-            sound: "default",
-          },
-        },
+    
+      data: Object.fromEntries(
+        Object.entries(restData).map(([k, v]) => [k, String(v)])
+      ),
+    
+      android: android || { priority: "high" },
+      apns: apns || {
+        payload: { aps: { sound: "default" } },
       },
     };
 
