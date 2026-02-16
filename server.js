@@ -24,9 +24,6 @@ app.post("/send-notification", async (req, res) => {
     }
 
     const {
-      fcmToken,
-      title,
-      body,
       android,
       ios,
       apns,
