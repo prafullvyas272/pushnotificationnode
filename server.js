@@ -1,5 +1,7 @@
 import express from "express";
 import admin from "./firebase.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -58,6 +60,13 @@ app.post("/send-notification", async (req, res) => {
   }
 });
 
+
+app.get("/health", async (req, res) => {
+    res.json({
+      success: true,
+      message: "API is working",
+    });
+});
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
