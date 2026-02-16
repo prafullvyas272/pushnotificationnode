@@ -12,6 +12,7 @@ app.use(express.json());
  */
 app.post("/send-notification", async (req, res) => {
   try {
+    const payloadFromFrontend = req.body;
     const {
       fcmToken,
       title,
