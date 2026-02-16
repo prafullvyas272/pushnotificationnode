@@ -6,16 +6,18 @@ app.use(express.json());
 
 /**
  * POST /send-notification
- * body: { fcmToken, title, body }
+ * body: anything from frontend
  */
 app.post("/send-notification", async (req, res) => {
   try {
-    const { fcmToken, title, body } = req.body;
+    const payloadFromFrontend = req.body;
+    const { fcmToken, title, body } = payloadFromFrontend;
 
     if (!fcmToken) {
       return res.status(400).json({
         success: false,
         message: "fcmToken is required",
+        receivedPayload: payloadFromFrontend,
       });
     }
 
@@ -43,6 +45,7 @@ app.post("/send-notification", async (req, res) => {
       success: true,
       message: "Notification sent",
       firebaseResponse: response,
+      receivedPayload: payloadFromFrontend,
     });
   } catch (error) {
     console.error("FCM Error:", error);
@@ -50,6 +53,7 @@ app.post("/send-notification", async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message,
+      receivedPayload: req.body,
     });
   }
 });
