@@ -15,19 +15,20 @@ app.post("/send-notification", async (req, res) => {
     const payloadFromFrontend = req.body;
     const {
       fcmToken,
-      title,
-      body,
+      // title,
+      // body,
       android,
       ios,
       apns,
       ...restData
     } = payloadFromFrontend;
+
     
     const androidConfig = {
       priority: "high",
-      notification: {
-        channelId: android?.channelId || "default",
-      },
+      // notification: {
+      //   channelId: android?.channelId || "default",
+      // },
     };
     
     const message = {
@@ -42,10 +43,11 @@ app.post("/send-notification", async (req, res) => {
         ...Object.fromEntries(
           Object.entries(restData).map(([k, v]) => [k, String(v)])
         ),
-        notifee: JSON.stringify({
-          android,
-          ios,
-        }),
+        ios : JSON.stringify({ios}),
+        // notifee: JSON.stringify({
+        //   android,
+        //   ios,
+        // }),
       },
     
       android: androidConfig,
