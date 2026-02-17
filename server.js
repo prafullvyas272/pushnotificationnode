@@ -33,10 +33,10 @@ app.post("/send-notification", async (req, res) => {
     const message = {
       token: fcmToken,
     
-      notification: {
-        title: title || "Test Notification",
-        body: body || "Hello from Node.js",
-      },
+      // notification: {
+      //   title: title || "Test Notification",
+      //   body: body || "Hello from Node.js",
+      // },
     
       data: {
         ...Object.fromEntries(
